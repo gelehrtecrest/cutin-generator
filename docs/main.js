@@ -46,7 +46,7 @@
 			});
 			// 画像を切り抜く
 			img_cutin.set({
-				sourceRect: new createjs.Rectangle(0, baseImg_cutin.height / 4, baseImg_cutin.width, baseImg_cutin.height / 4)
+				sourceRect: new createjs.Rectangle(0, baseImg_cutin.height / 4 + imageIni_cutin.mHeight, baseImg_cutin.width, baseImg_cutin.height / 4)
 			});
 			// 再描画
 			loadcutincanvas(imageData_cutin, false, imageIni_cutin.mHeight);	
@@ -77,7 +77,7 @@
 		img.alpha = imageIni.alpha;	
 
 		//cutin画像
-		img_cutin.y = img2.getBounds().height / 3 + imageIni_cutin.mHeight;
+		img_cutin.y = img2.getBounds().height / 3;
 
 		//ステージ生成
 		stage.addChild(img2);
@@ -204,7 +204,7 @@
 					$('input[name=logo]').val(['local']);
 				}
 			} else if(t['0'] == 'mheight'){
-				imageIni_cuttin.mHeight = parseFloat(t['1']);
+				imageIni_cutin.mHeight = parseFloat(t['1']);
 			} else if(t['0'] == 'title'){
 				$('title').text(decodeURIComponent(t['1']));
 				$('h1').text(decodeURIComponent(t['1']));
