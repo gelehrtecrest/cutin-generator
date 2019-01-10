@@ -1,0 +1,16 @@
+body {
+	padding-bottom: 20px;
+	background-color: white;
+}
+
+.canvas-stage {
+	background-color: lightgray;
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+#result,
+#preview,
+#canvas_cutin {
+	width: 100%;
+}
