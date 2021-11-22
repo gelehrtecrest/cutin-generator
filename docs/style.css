@@ -11,6 +11,7 @@ body {
 
 #result,
 #preview,
+#preview_cutin,
 #canvas_cutin {
 	width: 100%;
 }
