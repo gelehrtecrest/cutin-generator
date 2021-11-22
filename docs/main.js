@@ -18,10 +18,14 @@
 			} else {
 				img = null;
 			}
-		} else { // URL
+		} else if($('input[name=logo]:checked').val() === 'url'){
+			// URL
 			var baseImg = new Image();
 			baseImg.src = $('#logourl').val()
 			img = new createjs.Bitmap(baseImg);
+		} else {
+			// none
+			img = null;
 		}
 
 		//画像が選択されている時のみ合成
