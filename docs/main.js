@@ -48,12 +48,18 @@
 				'width': baseImg_cutin.width,
 				'height': baseImg_cutin.height / 4
 			});
+			//イメージの拡大
+			img_cutin.x = imageIni_cutin.xPos * 10 + img_cutin.getBounds().width / 2 * (1 + imageIni_cutin.Scale / 10);
+			img_cutin.y = imageIni_cutin.yPos * 10 + img_cutin.getBounds().height / 2 * (1 + imageIni_cutin.Scale / 10);
+			//拡縮は10％ずつ
+			img_cutin.scaleX = img_cutin.scaleX * (1 + imageIni_cutin.Scale / 10);
+			img_cutin.scaleY = img_cutin.scaleY * (1 + imageIni_cutin.Scale / 10);
 			// 画像を切り抜く
 			img_cutin.set({
 				sourceRect: new createjs.Rectangle(0, baseImg_cutin.height / 4 + imageIni_cutin.mHeight, baseImg_cutin.width, baseImg_cutin.height / 4)
 			});
 			// 再描画
-			loadcutincanvas(imageData_cutin, false, imageIni_cutin.mHeight);	
+			loadcutincanvas(imageData_cutin, false, imageIni_cutin);	
 		}
 		stage = new createjs.Stage('result');
 	}
@@ -85,6 +91,7 @@
 			logo_flag = false;
 		}
 		//cutin画像
+		img_cutin.x = 0;
 		img_cutin.y = img2.getBounds().height / 3;
 
 		//ステージ生成
@@ -101,7 +108,7 @@
 	$(function(){
 		//設定のデフォルト値
 		$('#logourl').val('./default_logo.png');
-		loadlogocanvas('./default_logo.png', false);
+		//loadlogocanvas('./default_logo.png', false);
 	
 		//ロゴURL変更時の処理
 		$(document).on('input', '#logourl', function() {
@@ -248,7 +255,7 @@
 			//読み込み後
 			$(reader).on('load',function(){
 				imageIni.imageData_cutin = reader.result;
-				loadcutincanvas(reader.result, false, imageIni_cutin.mHeight);
+				loadcutincanvas(reader.result, false, imageIni_cutin);
 			});
 		});
 
@@ -335,6 +342,19 @@
 				imageIni_cutin.mHeight -= 5;
 			}else if (e.target.id === 'down_cutin'){
 				imageIni_cutin.mHeight += 5;
+			}else if (e.target.id === 'zoomin_cutin') {
+				imageIni_cutin.Scale += 1;
+				console.log(imageIni_cutin.Scale);
+				if(imageIni_cutin.Scale > 0){
+					$('#zoomout_cutin').prop("disabled", false);
+				}
+				console.log(imageIni_cutin.Scale);
+			}else if (e.target.id === 'zoomout_cutin') {
+				imageIni_cutin.Scale -= 1;
+				if(imageIni_cutin.Scale <= 0){
+					imageIni_cutin.Scale = 0;
+					$('#zoomout_cutin').prop("disabled", true);
+				}
 			}else if (e.target.id === 'up'){
 				imageIni.yPos -= 1;
 			}else if (e.target.id === 'down'){
@@ -461,7 +481,7 @@
 		$('#settingurl a').attr('href', url);
 	}
 
-	function loadcutincanvas(url, flag, mHeight){
+	function loadcutincanvas(url, flag, imageIni_cutin){
 		var image = new Image();
 		image.onload = function() {
 			$('#canvas_cutin').attr({
@@ -470,7 +490,15 @@
 			});
 			var canvas = document.getElementById('canvas_cutin');
  			var context = canvas.getContext('2d');
-			context.drawImage(image, 0, context.canvas.height + mHeight, context.canvas.width, context.canvas.height, 0, 0, context.canvas.width, context.canvas.height);
+
+			//拡大の分の半分だけdx,dyずらす
+			var dx = 0 - context.canvas.width * (imageIni_cutin.Scale / 10 / 2);
+			var dy = 0 - context.canvas.height * (imageIni_cutin.Scale / 10 / 2);
+			//拡大の分だけdw,dhを増やす
+			var dw =  context.canvas.width * (1 + imageIni_cutin.Scale / 10);
+			var dh =  context.canvas.height * (1 + imageIni_cutin.Scale / 10);
+
+			context.drawImage(image, 0, context.canvas.height + imageIni_cutin.mHeight, context.canvas.width, context.canvas.height, dx, dy, dw, dh);
 		};
 		image.src = url;
 	}
